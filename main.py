@@ -7,19 +7,16 @@ from bs4 import BeautifulSoup
 
 def clean_key_string(string_):
     # Cleans the "key" in milanuncios.
-    # to-fix: String returned in [ ] rather than without them.
 
     cleaner = re.compile("[a-z][0-9]{1,10}")
-    clean_string = cleaner.findall(string_)
+    clean_string = cleaner.findall(string_)[0]
 
     return(clean_string)
-
 
 def get_website(url):
     soup = BeautifulSoup(url.content, "html.parser")
       
     return(soup)
-
 
 def generate_list_of_cars(soup):
     
@@ -34,30 +31,38 @@ def generate_list_of_cars(soup):
     car_list = []
     for i in range(0, len(keys)):
         car = {
-            "key": str(clean_key_string(keys[3].text)), 
-            "name": names[i].text,
-            "price": prices[i].text,
-            # "description": descriptions[i].text,
-            "km": kms[i].text,
-            "year": years[i].text,
-            "hp": hps[i].text
+            str(clean_key_string(keys[3].text)) : { 
+                "name": names[i].text,
+                "price": prices[i].text,
+                # "description": descriptions[i].text,
+                "km": kms[i].text,
+                "year": years[i].text,
+                "hp": hps[i].text
             }
-
+        }
         car_list.append(car)
 
     return(car_list)
-
 
 def print_car_list(car_list):
     for car in car_list:
         print(car)
         print("\n")
 
-
 def write_json_file(json_data):
     with open('data.json', 'w') as file:
         file.write(json_data)
 
+def update_price(car_list):
+    # Checks of price of a car is lower than on the DB, if so, updates it
+    with open('data.json', 'w') as current_data:
+        for car in car_list():
+            if car in current_data:
+                print("potato")
+            else:
+                print("fail")
+
+    return()
 
 def main():
     url = requests.get('http://jcabello.me/test.html')    
@@ -68,9 +73,9 @@ def main():
 
     write_json_file(json_data)
 
-    print(json_data)
+    update_price(car_list)
 
-    #print_car_list(car_list)
+    #print(json_data)
 
 
 if __name__ == "__main__":
