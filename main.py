@@ -13,17 +13,19 @@ def clean_key_string(string_):
 
     return(clean_string)
 
+
 def get_website(url):
     soup = BeautifulSoup(url.content, "html.parser")
-      
+
     return(soup)
 
+
 def generate_list_of_cars(soup):
-    
+
     keys = soup.find_all('div', attrs={'class': 'x5'})
     names = soup.find_all('a', attrs={'class': 'aditem-detail-title'})
     prices = soup.find_all('div', attrs={'class': 'aditem-price'})
-    descriptions = soup.find_all('div', attrs={'class': 'tx'})
+    # descriptions = soup.find_all('div', attrs={'class': 'tx'})
     kms = soup.find_all('div', attrs={'class': 'kms tag-mobile'})
     years = soup.find_all('div', attrs={'class': 'gas tag-mobile'})
     hps = soup.find_all('div', attrs={'class': 'cc tag-mobile'})
@@ -31,7 +33,7 @@ def generate_list_of_cars(soup):
     car_list = []
     for i in range(0, len(keys)):
         car = {
-            str(clean_key_string(keys[3].text)) : { 
+            str(clean_key_string(keys[3].text)): {
                 "name": names[i].text,
                 "price": prices[i].text,
                 # "description": descriptions[i].text,
@@ -44,14 +46,17 @@ def generate_list_of_cars(soup):
 
     return(car_list)
 
+
 def print_car_list(car_list):
     for car in car_list:
         print(car)
         print("\n")
 
+
 def write_json_file(json_data):
     with open('data.json', 'w') as file:
         file.write(json_data)
+
 
 def update_price(car_list):
     # Checks of price of a car is lower than on the DB, if so, updates it
@@ -64,18 +69,19 @@ def update_price(car_list):
 
     return()
 
+
 def main():
-    url = requests.get('http://jcabello.me/test.html')    
-    soup = get_website(url) # Soup is the web scrapper library, BeautifulSoup.
+    url = requests.get('http://jcabello.me/test.html')
+    soup = get_website(url)  # Soup is the web scrapper library, BeautifulSoup.
     car_list = generate_list_of_cars(soup)
-    
+
     json_data = json.dumps(car_list)
 
     write_json_file(json_data)
 
     update_price(car_list)
 
-    #print(json_data)
+    # print(json_data)
 
 
 if __name__ == "__main__":
