@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 def clean_key_string(string_):
-    # Cleans the "key" in milanuncios.
+    """Cleans the "key" in milanuncios."""
 
     cleaner = re.compile("[a-z][0-9]{1,10}")
     clean_string = cleaner.findall(string_)[0]
@@ -59,14 +59,11 @@ def write_json_file(json_data):
 
 
 def update_price(car_list):
-    # Checks of price of a car is lower than on the DB, if so, updates it
-    with open('data.json', 'w') as current_data:
-        for car in car_list():
-            if car in current_data:
-                print("potato")
-            else:
-                print("fail")
-
+    """Checks of price of a car is lower than on the DB, if so, updates it"""
+     
+    with open('data.json', 'r') as current_data:
+        current_data = json.load(current_data)
+        for each 
     return()
 
 
@@ -75,9 +72,9 @@ def main():
     soup = get_website(url)  # Soup is the web scrapper library, BeautifulSoup.
     car_list = generate_list_of_cars(soup)
 
-    json_data = json.dumps(car_list)
+    # json_data = json.dumps(car_list)
 
-    write_json_file(json_data)
+    # write_json_file(json_data)
 
     update_price(car_list)
 
